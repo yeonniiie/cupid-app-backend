@@ -1,9 +1,10 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -19,7 +20,44 @@ enum AuthType {
   apple
 }
 
-model User {
+model tb_food { 
+  id  String  @id @db.VarChar(20)
+  name  String
+  main_category  String
+  sub_category String
+  data_cd   String
+  data_cd_name  String
+  data_type String
+  kcal  Int
+  kcal_unit String
+  ash Float?
+  moisture  Float?  // g
+  carbs Float?
+  fat Float?
+  protein Float?
+  fiber Float?
+  calcium Float?
+  magnesium Float?
+  iron  Float?
+  sugar Float?
+  potassium Float?
+  sodium  Float?
+  vitaminA Float?
+  vitaminC Float?
+  vitaminD Float?
+
+  retinol Float?
+  beta_carotene Float?
+  riboflavin  Float?
+  niacin  Float?
+  cholesterol Float?
+  saturated_fat Float?
+  trans_fat Float?
+
+  @@index([main_category, sub_category])
+}
+
+model tb_user {
   id        String    @id @default(cuid()) @db.VarChar(255)
   email     String    @unique @db.VarChar(255)
   password  String?   @db.VarChar(255)
@@ -28,33 +66,66 @@ model User {
   thumbURL  String?   @db.VarChar(255)
   photoURL  String?   @db.VarChar(255)
   birthDay  DateTime?
-  gender    Gender?
+  gender    String?
   phone     String?   @db.VarChar(255)
-  verified  Boolean?
+  social_id  String? 
+  social_type String?
+
+  diets tb_diet[] 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
   deletedAt DateTime?
-  posts     Post[]
-  profile   Profile?
 }
 
-model Profile {
-  id       String    @id @default(cuid()) @db.VarChar(255)
-  socialId String?
-  authType AuthType?
-  userId   String    @unique @db.VarChar(255)
-  User     User      @relation(fields: [userId], references: [id])
-}
 
-model Post {
+model tb_diet {
   id        Int       @id @default(autoincrement())
   title     String    @db.VarChar(255)
   content   String?
   published Boolean   @default(false)
+
+  date  DateTime  //날짜
+
+  // 아침 
+  breakfast_id  String
+  breakfast_tot_kcal Float  @default(0)
+  // 점심
+  lunch_id String
+  lunch_tot_kcal  Float @default(0)
+  // 저녁
+  dinner_id String
+  dinner_tot_kcal Float @default(0)
+  
+  // 간식
+  // snack_id  Int
+  snacks  tb_diet_snack[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now())
   deletedAt DateTime?
 
   userId String @db.VarChar(255)
-  user   User   @relation(fields: [userId], references: [id])
+  user   tb_user   @relation(fields: [userId], references: [id])
+}
+
+model tb_diet_snack { 
+  id  Int @id @default(autoincrement())
+  diet_id Int
+  diet  tb_diet @relation(fields: [diet_id], references: [id])
+
+  snack_id  String
+  snack_tot_kcal  Float @default(0)
+
+  date  DateTime
+  time  Int
+
+  userId  String  @db.VarChar(255)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  deletedAt DateTime?
+
+  @@index([userId])
+
+
 }

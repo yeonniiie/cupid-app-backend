@@ -6,6 +6,7 @@
   "repository": "https://github.com/prisma-korea/prisma-nexus-apollo-boilerplate",
   "license": "MIT",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "start": "dotenv -e ./dotenv/dev.env -- ts-node --transpile-only --files src/server.ts",
     "dev": "dotenv -e ./dotenv/dev.env -- ts-node-dev --respawn --transpile-only --files src/server.ts",
     "prod": "node dist/server",
@@ -26,7 +27,7 @@
     "migrate:deploy": "dotenv -e ./dotenv/dev.env -- prisma migrate deploy",
     "db-push": "dotenv -e ./dotenv/dev.env -- prisma db push",
     "db-push:test": "dotenv -e ./dotenv/test.env -- prisma db push",
-    "studio": "dotenv -e ./dotenv/.env -- prisma studio"
+    "studio": "dotenv -e ./dotenv/dev.env -- prisma studio"
   },
   "dependencies": {
     "@apollo/client": "^3.7.17",
