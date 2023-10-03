@@ -8,7 +8,7 @@ export const me = queryField('me', {
   resolve: (_, __, {prisma, userId}) => {
     assert(userId, 'Not authorized');
 
-    return prisma.user.findUnique({
+    return prisma.tb_user.findUnique({
       where: {
         id: userId,
       },

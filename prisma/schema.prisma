@@ -61,7 +61,7 @@ model tb_user {
   id        String    @id @default(cuid()) @db.VarChar(255)
   email     String    @unique @db.VarChar(255)
   password  String?   @db.VarChar(255)
-  name      String?   @db.VarChar(255)
+  name      String?   @db.VarChar(255)  
   nickname  String?   @db.VarChar(255)
   thumbURL  String?   @db.VarChar(255)
   photoURL  String?   @db.VarChar(255)
@@ -72,9 +72,27 @@ model tb_user {
   social_type String?
 
   diets tb_diet[] 
+  user_social tb_user_social?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @default(now())
   deletedAt DateTime?
+}
+
+
+model tb_user_social {
+  id        String    @id @db.VarChar(255)
+  user      tb_user  @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  socialId      String
+  socialType    String
+  accessToken   String?
+  refreshToken  String?
+  identityToken String?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt
+  deletedAt DateTime?
+
+  @@index([socialId, socialType])
+
 }
 
 

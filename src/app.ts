@@ -16,6 +16,7 @@ export const createApp = (): Express => {
     res.send('It works - ver. 0.0.1');
   });
 
+ 
   app.use(
     '/altair',
     altairExpress({

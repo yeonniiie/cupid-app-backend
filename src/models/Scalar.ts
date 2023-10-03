@@ -1,4 +1,5 @@
-import {GraphQLDateTime} from 'graphql-iso-date';
+// import {GraphQLDateTime} from 'graphql-iso-date';
+import { DateTimeResolver } from 'graphql-scalars';
 // @ts-ignore
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import {asNexusMethod, enumType, scalarType} from 'nexus';
@@ -27,4 +28,4 @@ export const Gender = scalarType({
 });
 
 export const Upload = GraphQLUpload;
-export const DateTime = asNexusMethod(GraphQLDateTime, 'date');
+export const DateTime = asNexusMethod(DateTimeResolver, 'date');
