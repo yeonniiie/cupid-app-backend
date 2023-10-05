@@ -89,16 +89,20 @@ export const getSearchNLP = queryField('getSearchNLP', {
             }
         })
         return await prisma.tb_food.findMany({
-            where : { 
-                name : { 
-                    // search contains txt1 or txt2 
-                    // Mysql : txt1 txt2
-                    // psql : txt1 | txt2 
-                    search : searchText
-                }
-
-            }
+            take : 10 
         });
+        
+        // return await prisma.tb_food.findMany({
+        //     where : { 
+        //         name : { 
+        //             // search contains txt1 or txt2 
+        //             // Mysql : txt1 txt2
+        //             // psql : txt1 | txt2 
+        //             search : searchText
+        //         }
+
+        //     }
+        // });
 
     }
 });
