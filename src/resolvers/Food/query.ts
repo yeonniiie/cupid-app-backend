@@ -59,7 +59,7 @@ export const getSearchList = queryField('getSearchList', {
                     // search contains txt1 or txt2 
                     // Mysql : txt1 txt2
                     // psql : txt1 | txt2 
-                    search : `${txt}`
+                    search : `*${txt}*`
                 } 
             },
             orderBy : { 

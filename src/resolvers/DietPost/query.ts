@@ -1,6 +1,8 @@
 import {intArg, list, nonNull, queryField, stringArg} from 'nexus';
 import { connectionFromArray} from 'graphql-relay';
 import { assert } from '../../utils/assert';
+import { DateTime } from '../../models';
+
 
 export const getDietDetail = queryField('getDietDetail', { 
   type : 'Diet', 

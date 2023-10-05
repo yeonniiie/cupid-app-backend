@@ -24,9 +24,9 @@ model tb_food {
   id  String  @id @db.VarChar(20)
   name  String
   main_category  String
-  sub_category String
-  data_cd   String
-  data_cd_name  String
+  sub_category String?
+  data_cd   String?
+  data_cd_name  String?
   data_type String
   kcal  Int
   kcal_unit String
@@ -36,6 +36,7 @@ model tb_food {
   fat Float?
   protein Float?
   fiber Float?
+  phosphorus Float? // 인
   calcium Float?
   magnesium Float?
   iron  Float?
@@ -49,12 +50,15 @@ model tb_food {
   retinol Float?
   beta_carotene Float?
   riboflavin  Float?
+  thiamin Float?
   niacin  Float?
   cholesterol Float?
   saturated_fat Float?
   trans_fat Float?
 
   @@index([main_category, sub_category])
+  @@fulltext([name])
+  @@fulltext([name, main_category])
 }
 
 model tb_user {
@@ -105,6 +109,7 @@ model tb_diet {
   date  DateTime  //날짜
 
   // 아침 
+
   breakfast_id  String
   breakfast_tot_kcal Float  @default(0)
   // 점심

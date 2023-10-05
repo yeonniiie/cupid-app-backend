@@ -54,8 +54,6 @@ export const tb_user = objectType({
         t.string('phone');
         t.string('social_id');
         t.string('social_type');
-
-
     }
 })
 
@@ -67,13 +65,53 @@ export const Diet = objectType({
         t.int('id');
         t.string('title');
         t.string('content');
+        t.date('date');
         t.boolean('published');
+        t.list.field('breakfast', { 
+            type : 'Food', 
+            resolve : async ( _, args, ctx) => { 
+                const ids = _.breakfast_id?.split(',');
+                return await ctx.prisma.tb_food.findMany({
+                    where : { 
+                        id : {
+                            in : ids
+                        }
+                    }
+                });
+            }
+        });
         t.string('breakfast_id');
         t.float('breakfast_tot_kcal');
         t.string('lunch_id');
         t.float('lunch_tot_kcal');
+        t.list.field('lunch', { 
+            type : 'Food', 
+            resolve : async ( _, args, ctx) => { 
+                const ids = _.lunch_id?.split(',');
+                return await ctx.prisma.tb_food.findMany({
+                    where : { 
+                        id : {
+                            in : ids
+                        }
+                    }
+                });
+            }
+        });
         t.string('dinner_id');
         t.float('dinner_tot_kcal');
+        t.list.field('dinner', { 
+            type : 'Food', 
+            resolve : async ( _, args, ctx) => { 
+                const ids = _.dinner_id?.split(',');
+                return await ctx.prisma.tb_food.findMany({
+                    where : { 
+                        id : {
+                            in : ids
+                        }
+                    }
+                });
+            }
+        });
         t.int('snack_id');
         t.list.field('snacks', {
             type : "DietSnack",
@@ -124,7 +162,19 @@ export const tb_diet_snack = objectType({
                 })
             }
         });
-
+        t.list.field('snacks', { 
+            type : 'Food', 
+            resolve : async ( _, args, ctx) => { 
+                const ids = _.snack_id?.split(',');
+                return await ctx.prisma.tb_food.findMany({
+                    where : { 
+                        id : {
+                            in : ids
+                        }
+                    }
+                });
+            }
+        });
         t.string('snack_id');
         t.float('snack_tot_kcal');
 
