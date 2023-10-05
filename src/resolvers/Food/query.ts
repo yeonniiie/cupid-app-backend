@@ -89,7 +89,8 @@ export const getSearchNLP = queryField('getSearchNLP', {
             }
         })
         return await prisma.tb_food.findMany({
-            take : 10 
+            skip : Math.floor(Math.random() * 1001),
+            take :10
         });
         
         // return await prisma.tb_food.findMany({
