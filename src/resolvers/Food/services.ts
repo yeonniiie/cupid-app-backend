@@ -192,6 +192,7 @@ export const  evaluate=(food, human) => {
         ratio_province : ratio_province, 
         future_weight : futures.future_weight, 
         future_bmi : futures.future_bmi, 
-        future_expect : futures.future_expect
+        future_expect : futures.future_expect,
+        over_kcal : totalCalories - dailyMetabolic,
     };
 }

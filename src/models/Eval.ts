@@ -12,10 +12,11 @@ export const Evaluation = objectType({
         t.string('ratio_carb');
         t.string('ratio_protein'); 
         t.string('ratio_province'); 
-        
+
         t.string('future_weight'); 
         t.string('future_bmi'); 
         t.string('future_expect'); 
+        t.float('over_kcal');
 
     },
 })
