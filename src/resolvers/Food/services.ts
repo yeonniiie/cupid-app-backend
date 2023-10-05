@@ -157,6 +157,7 @@ export const  evaluate=(food, human) => {
         console.log(foodProcessed);
     }
     // 총 소모 칼로리 평가
+    console.log('총섭취 : ' + totalCalories );
     if (totalCalories >= 0.75*dailyMetabolic && totalCalories <= 1.25*dailyMetabolic){
         t_eval = "적당히";
         console.log("오늘은 적당한 양의 음식을 먹었어요.");
@@ -177,7 +178,7 @@ export const  evaluate=(food, human) => {
 	var ratio_province = totalProvince / ratio_all * 100;
 
     console.log(ratio_carbohydrate+" "+ratio_protein+" "+ratio_province);
-    const futures = future(human[2], human[3], dailyMetabolic);
+    const futures = future(human[2], human[3], totalCalories-dailyMetabolic);
 
     return { 
         food_names : foodProcessed, //  초가공식품명
