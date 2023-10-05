@@ -89,8 +89,8 @@ export const calculate = (food) => { // 섭취 - 소비 = 남은 칼로리
 
 
 
-export const future = (w, h, kcal) => { 
-    var futureWeight = w + kcal*0.00014285714; 
+export const future = (w, h, kcal, day) => { 
+    var futureWeight = w + kcal*0.00014285714 * day; 
     var bmi = futureWeight / ((h/100)^2);
     let expect = ""; 
     if ( bmi < 18.5) expect = "저체중"; 
@@ -107,7 +107,7 @@ export const future = (w, h, kcal) => {
 }
 
 
-export const  evaluate=(food, human) => {
+export const  evaluate=(food, human, day) => {
     var daily = calculate(food);
     var dailyMetabolic = consume(human);
     var foodProcessed : any[] = [];
@@ -178,7 +178,7 @@ export const  evaluate=(food, human) => {
 	var ratio_province = totalProvince / ratio_all * 100;
 
     console.log(ratio_carbohydrate+" "+ratio_protein+" "+ratio_province);
-    const futures = future(human[2], human[3], totalCalories-dailyMetabolic);
+    const futures = future(human[2], human[3], totalCalories-dailyMetabolic, day);
 
     return { 
         food_names : foodProcessed, //  초가공식품명

@@ -112,8 +112,9 @@ export const getEvaluationToday = queryField('getEvaluationToday', {
     type : 'Evaluation', 
     args : { 
         date : "DateTime", 
+        day : nonNull(intArg()), 
     }, 
-    resolve : async ( _, {date}, {userId, prisma}) => {
+    resolve : async ( _, {date,day}, {userId, prisma}) => {
         const user = await prisma.tb_user.findUnique({
             where : { 
                 id : userId
@@ -128,7 +129,7 @@ export const getEvaluationToday = queryField('getEvaluationToday', {
                 date : 'desc'
             }
         });
-
+        console.log(diet);
         if ( diet == null ) {
             return { 
 
@@ -147,14 +148,14 @@ export const getEvaluationToday = queryField('getEvaluationToday', {
         const lunch = await prisma.tb_food.findMany({
             where : { 
                 id : {
-                    in : diet.breakfast_id?.split(',')
+                    in : diet.lunch_id?.split(',')
                 }
             }
         });
         const dinner = await prisma.tb_food.findMany({
             where : { 
                 id : {
-                    in : diet.breakfast_id?.split(',')
+                    in : diet.dinner_id?.split(',')
                 }
             }
         });
@@ -191,7 +192,7 @@ export const getEvaluationToday = queryField('getEvaluationToday', {
         });
         let data = [breakfast_food, lunch_food, dinner_food];
         console.log('data... ', data);
-        return evaluate(data, me);
+        return evaluate(data, me, day);
     
     }
 })
