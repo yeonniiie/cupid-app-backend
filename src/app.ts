@@ -5,7 +5,7 @@ import type {Express} from 'express';
 import express from 'express';
 import path from 'path';
 
-const {PORT = 6001} = process.env;
+const {PORT = 6002} = process.env;
 
 export const createApp = (): Express => {
   const app = express();

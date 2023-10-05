@@ -13,7 +13,7 @@ import {schema} from './schema';
 
 export const schemaWithMiddleware = applyMiddleware(schema, permissions);
 
-const {NODE_ENV, PORT = 6001} = process.env;
+const {NODE_ENV, PORT = 6002} = process.env;
 
 let serverCleanup: Disposable;
 
