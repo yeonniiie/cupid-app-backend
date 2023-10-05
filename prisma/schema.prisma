@@ -74,6 +74,10 @@ model tb_user {
   phone     String?   @db.VarChar(255)
   social_id  String? 
   social_type String?
+  weight Float? @default(60)
+  height Float? @default(165)
+  excersize String? @default("B")
+  age Int?  @default(22)
 
   diets tb_diet[] 
   user_social tb_user_social?

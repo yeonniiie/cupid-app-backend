@@ -1,4 +1,5 @@
 import { intArg, list, nonNull, queryField, stringArg } from "nexus";
+import { evaluate } from "./services";
 
 
 export const getFoodList = queryField('getFoodList', { 
@@ -99,5 +100,93 @@ export const getSearchNLP = queryField('getSearchNLP', {
             }
         });
 
+    }
+});
+
+export const getEvaluationToday = queryField('getEvaluationToday', { 
+    type : 'Evaluation', 
+    args : { 
+        date : "DateTime", 
+    }, 
+    resolve : async ( _, {date}, {userId, prisma}) => {
+        const user = await prisma.tb_user.findUnique({
+            where : { 
+                id : userId
+            }
+        });
+        
+        const diet = await prisma.tb_diet.findFirst({
+            where : { 
+                userId : userId, 
+            }, 
+            orderBy : { 
+                date : 'desc'
+            }
+        });
+
+        if ( diet == null ) {
+            return { 
+
+            }
+        }
+
+        // evaluate 
+        let me = [user?.gender ?? "male", user?.age ?? 23, user?.weight ?? 70, user?.height ?? 176, user?.excersize ?? 'B' ];
+        const breakfast = await prisma.tb_food.findMany({
+            where : { 
+                id : {
+                    in : diet.breakfast_id?.split(',')
+                }
+            }
+        });
+        const lunch = await prisma.tb_food.findMany({
+            where : { 
+                id : {
+                    in : diet.breakfast_id?.split(',')
+                }
+            }
+        });
+        const dinner = await prisma.tb_food.findMany({
+            where : { 
+                id : {
+                    in : diet.breakfast_id?.split(',')
+                }
+            }
+        });
+
+        const _snack = await prisma.tb_diet_snack.findFirst({
+            where : { 
+                diet_id : diet.id,
+                userId : userId,
+            }
+        });
+        const snack = await prisma.tb_food.findMany({
+            where : { 
+                id : { 
+                    in : _snack?.snack_id?.split(',')
+                }
+            }
+        });
+
+
+
+        let breakfast_food : any[] = [];
+        let lunch_food : any[] = [];
+        let dinner_food : any[] = [];
+        breakfast.forEach( ( item ) => { 
+            breakfast_food.push( [item.name, item.data_type, item.kcal, item.carbs, item.protein, item.fat ]);
+        });
+
+        lunch.forEach( ( item ) => { 
+            lunch_food.push( [item.name, item.data_type, item.kcal, item.carbs, item.protein, item.fat ]);
+        });
+
+        dinner.forEach( ( item ) => { 
+            dinner_food.push( [item.name, item.data_type, item.kcal, item.carbs, item.protein, item.fat ]);
+        });
+        let data = [breakfast_food, lunch_food, dinner_food];
+        console.log('data... ', data);
+        return evaluate(data, me);
+    
     }
 })
