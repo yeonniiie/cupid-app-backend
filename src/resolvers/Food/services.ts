@@ -96,6 +96,7 @@ export const future = (w, h, kcal) => {
     if ( bmi < 18.5) expect = "저체중"; 
     else if ( bmi >=18.5 && bmi < 25) expect = "표준"; 
     else if ( bmi >=25 && bmi < 30) expect = "과체중"; 
+    else if ( bmi >=30 && bmi < 35) expect = "비만";
     else expect = "고도비만";
 
     return { 
@@ -118,10 +119,10 @@ export const  evaluate=(food, human) => {
     var totalProtein = 0;    
     var totalProvince = 0;    
     var totalCount = 0;
-    var b_eval = ""; 
-    var l_eval = ""; 
-    var d_eval = ""; 
-    var t_eval = ""; 
+    var b_eval = "적당히"; 
+    var l_eval = "적당히"; 
+    var d_eval = "적당히"; 
+    var t_eval = "적당히"; 
     var eat_much = false; 
 
     for (let i = 0; i < daily.length; i++){
