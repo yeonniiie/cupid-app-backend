@@ -1,5 +1,7 @@
 import { intArg, list, nonNull, queryField, stringArg } from "nexus";
 import { evaluate } from "./services";
+import fetch from 'node-fetch';
+
 
 
 export const getFoodList = queryField('getFoodList', { 
@@ -78,32 +80,50 @@ export const getSearchNLP = queryField('getSearchNLP', {
         txt : stringArg(), 
     },
     resolve : async ( _, {txt}, {prisma, userId}) => {
+
+        const _body = {
+            "TEXT" : txt
+        };
+
+        const response = await fetch(`http://127.0.0.1:9999/nlp`, {
+            method : 'POST',
+            headers : {
+                "content-type" : "application/json",
+            },
+            body : JSON.stringify(_body)
+        });
+        const data = await response.json(); 
+        console.log('data is : ', data);
+
         const txtList = String(txt).split(',');
         let searchText = "";
-        txtList.forEach( (val, idx) => { 
-            if ( txtList.length != (idx+1)) {
-                searchText += val + ' ';
-            }
-            else {
-                searchText += val;
-            }
-        })
-        return await prisma.tb_food.findMany({
-            skip : Math.floor(Math.random() * 1001),
-            take :10
-        });
+        if ( data != null && data.length > 0) {
+            data.forEach((val, idx) => {
+                searchText += `*${val}*`;
+                if ( data.length != (idx + 1)) {
+                    searchText += ' ';
+                }
+            });
+        }
         
         // return await prisma.tb_food.findMany({
-        //     where : { 
-        //         name : { 
-        //             // search contains txt1 or txt2 
-        //             // Mysql : txt1 txt2
-        //             // psql : txt1 | txt2 
-        //             search : searchText
-        //         }
-
-        //     }
+        //     skip : Math.floor(Math.random() * 1001),
+        //     take :10
         // });
+
+        
+        return await prisma.tb_food.findMany({
+            where : { 
+                name : { 
+                    // search contains txt1 or txt2 
+                    // Mysql : txt1 txt2
+                    // psql : txt1 | txt2 
+                    search : searchText
+                }
+            },
+            take : 100 
+            
+        });
 
     }
 });
